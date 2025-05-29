@@ -5,6 +5,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import adamyan.neuralengine.activations.*;
+import adamyan.neuralengine.*;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class Main extends Application {
     @Override
@@ -17,6 +22,19 @@ public class Main extends Application {
         helloWorldText.setFont(new Font(50));
         helloWorldText.setLayoutX(400);
         helloWorldText.setLayoutY(400);
+
+        Layer[] layers = {
+                new Layer(4, ActivationFunctions::linear),
+                new Layer(10, ActivationFunctions::sigmoid),
+                new Layer(10, ActivationFunctions::sigmoid),
+                new Layer(2, ActivationFunctions::sigmoid),
+        };
+
+        Network network = new Network(layers);
+
+        double[] output = network.feedForward(new double[]{0.2, 0.4, 0.5, 0.1});
+
+        System.out.println(Arrays.toString(output));
 
         Group rootNode = new Group(helloWorldText);
 

@@ -1,3 +1,5 @@
+import adamyan.neuralengine.Network;
+
 /**
  * represents a single ant
  */
