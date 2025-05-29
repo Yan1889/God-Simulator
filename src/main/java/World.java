@@ -6,4 +6,7 @@ import java.util.List;
 public class World {
     private List<AntPopulation> antPopulations;
     private List<Obstacle> obstacles;
+
+    public void calculateFrame() {}
+    public void draw() {}
 }
