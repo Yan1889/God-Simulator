@@ -30,7 +30,7 @@ public class Main extends Application {
                 new Layer(2, ActivationFunctions::sigmoid),
         };
 
-        Network network = new Network(layers, "weights.bin");
+        Network network = new Network(layers);
 
         double[] output = network.feedForward(new double[]{0.2, 0.4, 0.5, 0.1});
 
