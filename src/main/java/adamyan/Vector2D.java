@@ -1,7 +1,9 @@
+package adamyan;
+
 /**
  * This represents a vector (like a position) in 2D space.
  * <p>
- * Note: Vector2D objects are immutable (record classes) => when it is modified, a new object is created
+ * Note: adamyan.Vector2D objects are immutable (record classes) => when it is modified, a new object is created
  * @param x the x coordinate of the vector
  * @param y the y coordinate of the vector
  */

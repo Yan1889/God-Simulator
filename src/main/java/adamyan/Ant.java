@@ -1,3 +1,5 @@
+package adamyan;
+
 import adamyan.neuralengine.Network;
 
 /**

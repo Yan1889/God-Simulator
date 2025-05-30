@@ -1,9 +1,8 @@
 package adamyan.neuralengine;
 
-import adamyan.neuralengine.activations.ActivationFunction_I;
-
 import java.util.*;
 import java.io.*;
+import java.util.function.Function;
 
 /**
  * Represents a neural network
@@ -163,7 +162,7 @@ public class Network {
             }
 
             // Activation function
-            ActivationFunction_I activation = layers[layerIdx + 1].activationFunction();
+            Function<Double, Double> activation = layers[layerIdx + 1].activationFunction();
 
             for (int outputNeuron = 0; outputNeuron < layers[layerIdx + 1].length(); outputNeuron++) {
                 nextLayerActivations[outputNeuron] = activation.apply(nextLayerActivations[outputNeuron]);

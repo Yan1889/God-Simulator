@@ -1,3 +1,5 @@
+package adamyan;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -5,7 +7,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import adamyan.neuralengine.activations.*;
 import adamyan.neuralengine.*;
 
 import java.util.Arrays;

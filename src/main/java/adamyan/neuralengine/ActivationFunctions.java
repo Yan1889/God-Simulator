@@ -1,4 +1,4 @@
-package adamyan.neuralengine.activations;
+package adamyan.neuralengine;
 
 /**
  * Collection of activation functions for neural networks

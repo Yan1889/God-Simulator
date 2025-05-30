@@ -1,3 +1,7 @@
+package adamyan;
+
+import adamyan.Obstacles.Obstacle;
+
 import java.util.List;
 
 /**
