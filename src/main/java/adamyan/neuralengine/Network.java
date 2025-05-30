@@ -35,11 +35,14 @@ public class Network {
     }
 
     /**
-     * Creates and initializes a new neural network randomly
+     * Creates and initializes a new neural network from a file
      *
-     * @param layers Array of layer configurations
+     * @param layers      Array of layer configurations
+     * @param srcFileName Weights source file name
      */
-    public Network(Layer[] layers) {
+    public Network(Layer[] layers, String srcFileName) {
+        File file = new File(srcFileName);
+
         this.layers = layers;
         this.size = layers.length;
 
@@ -51,30 +54,50 @@ public class Network {
                     [layers[layer + 1].length()];
         }
 
-        randomizeWeights();
-    }
-
-    /**
-     * Load Weights from a file
-     */
-    public static Network loadFromFile(String srcFileName) {
-        File srcFile = new File(srcFileName);
-
-        if (!srcFile.exists()) {
-            throw new RuntimeException();
+        if (!file.exists()) {
+            System.out.println("Weights file not found. Will randomize weights.");
+            randomizeWeights();
+            return;
         }
-        // loading of state
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(srcFile))) {
-            return (Network) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(srcFileName))) {
+            // Read network size and verify
+            int savedSize = dis.readInt();
+            if (savedSize != size) {
+                System.err.println("Saved network size doesn't match current network.");
+                System.exit(1);
+            }
+
+            // Read each layer
+            for (int layer = 0; layer < size - 1; layer++) {
+                int inputSize = dis.readInt();
+                int outputSize = dis.readInt();
+
+                // Verify dimensions
+                if (inputSize != layers[layer].length() + 1 ||
+                        outputSize != layers[layer + 1].length()) {
+                    System.err.println("Saved layer dimensions don't match current network.");
+                    System.exit(1);
+                }
+
+                // Read weights
+                for (int i = 0; i < layers[layer].length() + 1; i++) {
+                    for (int j = 0; j < layers[layer + 1].length(); j++) {
+                        weights[layer][i][j] = dis.readDouble();
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error loading weights: " + e.getMessage());
+            System.exit(2);
         }
     }
 
     /**
      * Initializes network weights with random values using Xavier/Glorot
      * initialization
-     *
+     * <p>
      * Implements Xavier/Glorot initialization which helps with: 1. Preventing
      * vanishing/exploding gradients 2. Maintaining appropriate scale of
      * gradients through the network Scale factor is calculated as sqrt(2 /
@@ -98,8 +121,9 @@ public class Network {
 
     /**
      * Mutates the neural network randomly
+     *
      * @param probabilityOfMutation is the probability that each weight is changed
-     * @param maxMutationStrength is the amount a weight is max allowed to change
+     * @param maxMutationStrength   is the amount a weight is max allowed to change
      */
 
     public void mutateWeights(double probabilityOfMutation, double maxMutationStrength) {
@@ -120,21 +144,35 @@ public class Network {
      *
      * @return true if save was successful, false otherwise
      */
-    public boolean writeToFile(String tarFileName) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(tarFileName))) {
-            oos.writeObject(this);
+    public void writeToFile(String tarFileName) {
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(tarFileName))) {
+            // Write network size
+            dos.writeInt(size);
+
+            // For each layer, write dimensions
+            for (int layer = 0; layer < size - 1; layer++) {
+                dos.writeInt(layers[layer].length() + 1); // +1 for bias
+                dos.writeInt(layers[layer + 1].length());
+
+                // Write weights for this layer
+                for (int i = 0; i < layers[layer].length() + 1; i++) {
+                    for (int j = 0; j < layers[layer + 1].length(); j++) {
+                        dos.writeDouble(weights[layer][i][j]);
+                    }
+                }
+            }
 
             System.out.println("Weights saved to " + tarFileName);
-            return true;
+            return;
         } catch (IOException e) {
             System.err.println("Error saving weights: " + e.getMessage());
-            return false;
+            System.exit(3);
         }
     }
 
     /**
      * Performs forward propagation through the network
-     *
+     * <p>
      * This function: 1. Propagates input through each layer 2. Applies weights
      * and biases 3. Handles special case for softmax in output layer 4. Applies
      * activation functions 5. Returns final layer output

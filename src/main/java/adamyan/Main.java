@@ -30,11 +30,13 @@ public class Main extends Application {
                 new Layer(2, ActivationFunctions::sigmoid),
         };
 
-        Network network = new Network(layers);
+        Network network = new Network(layers, "weights.bin");
 
         double[] output = network.feedForward(new double[]{0.2, 0.4, 0.5, 0.1});
 
         System.out.println(Arrays.toString(output));
+
+        network.writeToFile("weights.bin");
 
         Group rootNode = new Group(helloWorldText);
 
