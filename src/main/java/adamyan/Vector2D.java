@@ -33,4 +33,11 @@ public record Vector2D(double x, double y) {
     public Vector2D normalized() {
         return scale(1 / magnitude());
     }
+
+    public Vector2D minus(Vector2D other) {
+        return new Vector2D(
+                x - other.x,
+                y - other.y
+        );
+    }
 }

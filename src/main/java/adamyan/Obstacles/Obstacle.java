@@ -1,6 +1,7 @@
 package adamyan.Obstacles;
 
 import adamyan.Vector2D;
+import javafx.scene.canvas.Canvas;
 
 import java.util.Optional;
 
@@ -9,4 +10,5 @@ import java.util.Optional;
  */
 public abstract class Obstacle {
     public abstract Optional<Vector2D> getIntersectionPoint();
+    public abstract void drawOnCanvas(Canvas canvas);
 }
