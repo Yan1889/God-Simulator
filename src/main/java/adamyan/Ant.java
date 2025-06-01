@@ -21,12 +21,16 @@ public class Ant {
         this.rotationAngle = 0;
     }
 
-    public void act_logic() {
-        // random movement without network
-        position = new Vector2D(
-                position.x() + 2 * Math.random() - 1,
-                position.y() + 2 * Math.random() - 1
-        );
+    public void act() {
+        // random movement
+        position = position.plus(Vector2D.randomUnitVector());
+    }
+
+    private void move(double distance) {
+        Vector2D movementVector = Vector2D
+                .unitVectorOfAngle(rotationAngle)
+                .scale(distance);
+        position = position.plus(movementVector);
     }
 
     public void drawOnCanvas(GraphicsContext gc) {
@@ -40,7 +44,7 @@ public class Ant {
     public Vector2D getPosition() {
         return position;
     }
-    public double getRotationAngle() {
+    public double getRotation() {
         return rotationAngle;
     }
 }

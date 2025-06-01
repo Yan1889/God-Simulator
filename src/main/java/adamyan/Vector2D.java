@@ -9,6 +9,25 @@ package adamyan;
  */
 public record Vector2D(double x, double y) {
 
+
+    /**
+     * @param angle the angle of the vector
+     * @return a vector of length 1
+     */
+    public static Vector2D unitVectorOfAngle(double angle) {
+        return new Vector2D(
+                Math.cos(angle),
+                Math.sin(angle)
+        );
+    }
+
+    /**
+     * @return a vector of length 1 pointing in a random direction
+     */
+    public static Vector2D randomUnitVector() {
+        return unitVectorOfAngle(Math.random() * Math.TAU);
+    }
+
     /**
      * @param scalar
      * @return a new Vector
@@ -38,6 +57,13 @@ public record Vector2D(double x, double y) {
         return new Vector2D(
                 x - other.x,
                 y - other.y
+        );
+    }
+
+    public Vector2D plus(Vector2D other) {
+        return new Vector2D(
+                x + other.x,
+                y + other.y
         );
     }
 }

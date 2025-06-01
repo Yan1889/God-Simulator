@@ -54,7 +54,7 @@ public class AntPopulation {
 
     public void calculateFrame() {
         for (Ant ant : ants) {
-            ant.act_logic();
+            ant.act();
         }
     }
     public void flood() {}
